@@ -4,7 +4,8 @@ import { findDOMNode } from 'react-dom';
 class Tilt extends Component {
   constructor(props) {
     super(props);
-
+    
+    this.elementRef = React.createRef();
     this.state = {
       style : {}
     }
@@ -37,10 +38,9 @@ class Tilt extends Component {
     this.onMouseLeave = this.onMouseLeave.bind(this, this.props.onMouseLeave);
   }
   componentDidMount() {
-    this.element = findDOMNode(this);
-    const myNode = this.getDOMNode();
+    this.element = this.elementRef.current;
     setTimeout(() => {
-      if (myNode.parentElement.querySelector(':hover') === myNode){
+      if (this.element.parentElement.querySelector(':hover') === this.element) {
         this.onMouseEnter();
       }
     }, 0);
@@ -159,6 +159,7 @@ class Tilt extends Component {
     const style = Object.assign({}, this.props.style, this.state.style)
     return (
       <div style={style}
+        ref={this.elementRef}
         className={this.props.className}
         onMouseEnter={this.onMouseEnter}
         onMouseMove={this.onMouseMove}

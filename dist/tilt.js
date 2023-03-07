@@ -30,6 +30,7 @@ var Tilt = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Tilt.__proto__ || Object.getPrototypeOf(Tilt)).call(this, props));
 
+    _this.elementRef = _react2.default.createRef();
     _this.state = {
       style: {}
     };
@@ -66,7 +67,14 @@ var Tilt = function (_Component) {
   _createClass(Tilt, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.element = (0, _reactDom.findDOMNode)(this);
+      var _this2 = this;
+
+      this.element = this.elementRef.current;
+      setTimeout(function () {
+        if (_this2.element.parentElement.querySelector(':hover') === _this2.element) {
+          _this2.onMouseEnter();
+        }
+      }, 0);
     }
   }, {
     key: 'componentWillUnmount',
@@ -95,12 +103,12 @@ var Tilt = function (_Component) {
   }, {
     key: 'reset',
     value: function reset() {
-      var _this2 = this;
+      var _this3 = this;
 
       window.requestAnimationFrame(function () {
-        _this2.setState(Object.assign({}, _this2.state, {
-          style: _extends({}, _this2.state.style, {
-            transform: "perspective(" + _this2.settings.perspective + "px) " + "rotateX(0deg) " + "rotateY(0deg) " + "scale3d(1, 1, 1)" })
+        _this3.setState(Object.assign({}, _this3.state, {
+          style: _extends({}, _this3.state.style, {
+            transform: "perspective(" + _this3.settings.perspective + "px) " + "rotateX(0deg) " + "rotateY(0deg) " + "scale3d(1, 1, 1)" })
         }));
       });
     }
@@ -124,7 +132,7 @@ var Tilt = function (_Component) {
   }, {
     key: 'setTransition',
     value: function setTransition() {
-      var _this3 = this;
+      var _this4 = this;
 
       clearTimeout(this.transitionTimeout);
 
@@ -135,8 +143,8 @@ var Tilt = function (_Component) {
       }));
 
       this.transitionTimeout = setTimeout(function () {
-        _this3.setState(Object.assign({}, _this3.state, {
-          style: _extends({}, _this3.state.style, {
+        _this4.setState(Object.assign({}, _this4.state, {
+          style: _extends({}, _this4.state.style, {
             transition: ''
           })
         }));
@@ -205,6 +213,7 @@ var Tilt = function (_Component) {
       return _react2.default.createElement(
         'div',
         { style: style,
+          ref: this.elementRef,
           className: this.props.className,
           onMouseEnter: this.onMouseEnter,
           onMouseMove: this.onMouseMove,
